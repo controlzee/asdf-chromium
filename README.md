@@ -1,5 +1,9 @@
 <div align="center">
 
+# NOTE
+
+This plugin is still in testing!
+
 # asdf-chromium [![Build](https://github.com/controlzee/asdf-chromium/actions/workflows/build.yml/badge.svg)](https://github.com/controlzee/asdf-chromium/actions/workflows/build.yml) [![Lint](https://github.com/controlzee/asdf-chromium/actions/workflows/lint.yml/badge.svg)](https://github.com/controlzee/asdf-chromium/actions/workflows/lint.yml)
 
 [chromium](https://github.com/controlzee/asdf-chromium) plugin for the [asdf version manager](https://asdf-vm.com).
@@ -57,4 +61,4 @@ Contributions of any kind welcome! See the [contributing guide](contributing.md)
 
 # License
 
-See [LICENSE](LICENSE) © [Jordan](https://github.com/controlzee/)
+See [LICENSE](LICENSE) © [controlzee](https://github.com/controlzee/)
