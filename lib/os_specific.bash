@@ -8,8 +8,14 @@ DOWNLOAD_FILE_NAME="Chromium.app"
 TOOL_TEST="chrome/Chromium.app/Contents/MacOS/Chromium --help"
 # IS_ON_JENKINS="${JENKINS_USER}" # for now check if this is set
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-	# linux -- probably jenkins?
+if [[ "$(uname -m)" == "aarch64" ]]; then
+	# Jenkins
+	DOWNLOAD_PREFIX="Linux_ARM_Cross-Compile"
+	DOWNLOAD_FOLDER="chrome-linux"
+    DOWNLOAD_FILE_NAME="chrome"
+	TOOL_TEST="chrome/chrome --help"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+	# linux -- probably not jenkins?
 	DOWNLOAD_PREFIX="Linux"
 	DOWNLOAD_FOLDER="chrome-linux"
     DOWNLOAD_FILE_NAME="chrome"
