@@ -73,8 +73,8 @@ download_release() {
 
 			url=""https://github.com/chromium-for-lambda/chromium-binaries/releases/download/arm64-amazon-linux-2023-chromium-$trimmed_version/chrome-$jenkins_version-arm64-amazon-linux-2023.zip""
 			echo "downloading from url $url"
-			echo curl "${curl_opts[@]}" -C -o "$filename" "$url"
-			curl "${curl_opts[@]}" -C -o "$filename" "$url" || fail "Could not download $url"
+			echo curl "${curl_opts[@]}" -C - -o "$filename" "$url"
+			curl "${curl_opts[@]}" -C - -o "$filename" "$url" || fail "Could not download $url"
 		else
 			fail "Unable to install empty jenkins version"
 		fi
