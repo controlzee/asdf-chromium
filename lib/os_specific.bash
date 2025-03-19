@@ -7,13 +7,18 @@ DOWNLOAD_FOLDER="chrome-mac"
 DOWNLOAD_FILE_NAME="Chromium.app"
 TOOL_TEST="chrome/Chromium.app/Contents/MacOS/Chromium --help"
 # IS_ON_JENKINS="${JENKINS_USER}" # for now check if this is set
+IS_ON_JENKINS_MISE="false"
 
 if [[ "$(uname -m)" == "aarch64" ]]; then
 	# Jenkins
 	DOWNLOAD_PREFIX="Linux_ARM_Cross-Compile"
 	DOWNLOAD_FOLDER="chrome-linux"
+	# at the moment we're renaming the linked folder instead of
+	# the main folder so that we can transition smoothly over, since most branches still use the
+	# fully qualified name
     DOWNLOAD_FILE_NAME="chrome"
 	TOOL_TEST="chrome/chrome --help"
+	IS_ON_JENKINS_MISE="true"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	# linux -- probably not jenkins?
 	DOWNLOAD_PREFIX="Linux"
@@ -49,4 +54,5 @@ export \
     TOOL_TEST \
     DOWNLOAD_PREFIX \
     DOWNLOAD_FOLDER \
-    DOWNLOAD_FILE_NAME
+    DOWNLOAD_FILE_NAME \
+	IS_ON_JENKINS_MISE

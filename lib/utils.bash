@@ -54,14 +54,39 @@ list_all_versions() {
 
 download_release() {
 	local version filename url
-	version="$1"
+	version="$1_" # append a _ so that we have an empty version by default if on jenkins and you don't include the
+	# second version number split by _
 	filename="$2"
 
-	# url="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Mac_Arm%2F1000235%2Fchrome-mac.zip?generation=1651810093403336&alt=media"
-	url="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/${DOWNLOAD_PREFIX}%2F${version}%2F${DOWNLOAD_FOLDER}.zip?alt=media" #?generation=1651810093403336&alt=media"
-	echo "* Downloading $TOOL_NAME release $version for $DOWNLOAD_PREFIX..."
-	echo curl "${curl_opts[@]}" -o "$filename" -C - "$url"
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	local_version=$(echo "$version" | cut -d "_" -f 1)
+	jenkins_version=$(echo "$version" | cut -d "_" -f 2)
+
+
+	if [[ "$IS_ON_JENKINS_MISE" == "true" ]]; then
+		# running on jenkins
+		if [ -n $jenkins_version ]; then
+			# length of jenkins version string is greater than 0
+			# expecting a string like "123.0.6312.122", but the download path is funky and also uses a trimmed version without the final version number
+			echo "Downloading jenkins version $jenkins_version"
+
+			trimmed_version=$(echo $jenkins_version | rev | cut -d"." -f2- | rev) || fail "Could trim $jenkins_version into trimmed version"
+
+			url=""https://github.com/chromium-for-lambda/chromium-binaries/releases/download/arm64-amazon-linux-2023-chromium-$trimmed_version/chrome-$jenkins_version-arm64-amazon-linux-2023.zip""
+			echo "downloading from url $url"
+			echo curl "${curl_opts[@]}" -C -o "$filename" "$url"
+			curl "${curl_opts[@]}" -C -o "$filename" "$url" || fail "Could not download $url"
+		else
+			fail "Unable to install empty jenkins version"
+		fi
+	else
+		echo "downloading local dev version $local_version"
+		version="$local_version"
+		# url="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Mac_Arm%2F1000235%2Fchrome-mac.zip?generation=1651810093403336&alt=media"
+		url="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/${DOWNLOAD_PREFIX}%2F${version}%2F${DOWNLOAD_FOLDER}.zip?alt=media" #?generation=1651810093403336&alt=media"
+		echo "* Downloading $TOOL_NAME release $version for $DOWNLOAD_PREFIX..."
+		echo curl "${curl_opts[@]}" -o "$filename" -C - "$url"
+		curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	fi
 }
 
 install_version() {
