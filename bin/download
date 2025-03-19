@@ -23,7 +23,7 @@ cd "$ASDF_DOWNLOAD_PATH"
 echo "current directory"
 pwd
 unzip "$release_file" || fail "Could not extract $release_file"
-mv "${DOWNLOAD_FOLDER}/" "chrome/"
+mv "${DOWNLOAD_FOLDER}" "chrome"
 chmod +x "chrome/${DOWNLOAD_FILE_NAME}"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
